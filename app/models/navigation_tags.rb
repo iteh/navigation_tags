@@ -70,7 +70,7 @@ module NavigationTags
     current_page = tag.locals.page
     child_page = tag.attr[:page]
     depth = tag.attr[:depth]
-    css_class = [("current" if current_page == child_page), ("has_children" if child_page.children.size > 0), ("parent_of_current" if current_page.url.starts_with?(child_page.url) and current_page != child_page)].compact
+    css_class = ["sub-nav", ("current" if current_page == child_page), ("has_children" if child_page.children.size > 0), ("parent_of_current" if current_page.url.starts_with?(child_page.url) and current_page != child_page)].compact
     if !@first_set
       css_class << 'first'
       @first_set = true
