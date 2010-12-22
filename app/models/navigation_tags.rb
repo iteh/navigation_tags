@@ -22,7 +22,8 @@ module NavigationTags
     
     * @only@ a string or regular expresssion. only pages whose urls match this are included
     * @except@ a string or regular expresssion. pages whose urls match this are not shown. except will override only. use to eliminate non-content file-types
-    
+
+    * @prepend@ add navigation content before calculated part, default is after
     * @id@, @class@,..: go as html attributes of the outer ul
   }
     
@@ -34,7 +35,7 @@ module NavigationTags
     raise NavTagError, "No page found at \"#{root_url}\" to build navigation from." if root.class_name.eql?('FileNotFoundPage')
     
     depth = tag.attr.delete('depth') || 1
-    ['include_root', 'ids_for_lis', 'ids_for_links', 'expand_all', 'first_set', 'only', 'except'].each do |prop|
+    ['include_root', 'ids_for_lis', 'ids_for_links', 'expand_all', 'first_set', 'only', 'except', 'prepend'].each do |prop|
       eval "@#{prop} = tag.attr.delete('#{prop}') || false"
     end
     
@@ -59,9 +60,12 @@ module NavigationTags
     else
       tag_options = nil
     end
-    
+
+    # add navigation tag content before or after main navigation part
     %{<ul#{tag_options}>
+    #{tag.expand if @prepend}
     #{tree}
+    #{tag.expand unless @prepend}
     </ul>}
 
   end
